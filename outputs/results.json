@@ -1,0 +1,5 @@
+{
+  "phishing_score": 8,
+  "verdict": "Phishing",
+  "explanation": "The content is from a piracy website (illegal movie downloads), which are high-risk environments known for intrusive advertising, redirects to malicious sites, and potential phishing vectors through deceptive download buttons or pop-ups. The presence of suspicious external scripts for advertising increases this risk."
+}
