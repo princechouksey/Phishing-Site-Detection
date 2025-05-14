@@ -3,4 +3,7 @@ beautifulsoup4
 selenium
 pytesseract
 Pillow
-openai  # For Gemini API
+openai 
+fastapi
+uvicorn
+
