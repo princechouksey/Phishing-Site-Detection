@@ -1,5 +1,5 @@
 {
-  "phishing_score": 7,
-  "verdict": "Phishing",
-  "explanation": "The site offers free access to copyrighted movies and TV shows, which is often associated with illegal activities and high risk of malware, intrusive ads, and credential phishing through fake login forms."
+  "phishing_score": 0,
+  "verdict": "Safe",
+  "explanation": "The provided HTML content appears to be from a legitimate website (Hoopla Digital). It includes detailed Schema.org markup with company information, links to various sections of the site, external links to official social media profiles and app stores, and standard analytics scripts. There are no obvious signs of malicious intent, deceptive links, or urgent/threatening language typical of phishing sites within the provided HTML. The site's purpose (accessing digital media from a public library) is clearly stated."
 }

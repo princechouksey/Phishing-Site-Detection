@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import json
 import datetime
 
@@ -8,6 +8,7 @@ from crawler.static_crawler import crawl_static_html
 from crawler.dynamic_crawler import crawl_dynamic_html
 from extractor.image_extractor import extract_and_download_images
 from extractor.ocr import perform_ocr_on_images
+from extractor.dom_parser import parse_html_for_dom_elements
 from analyzer.llm_formatter import prepare_llm_input
 from analyzer.llm_analyzer import analyze_with_llm
 
@@ -18,10 +19,10 @@ from db.models import URLRequest, ResultModel
 # Initialize FastAPI app
 app = FastAPI()
 
-# Add CORS (important for frontend access)
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, restrict to your frontend URL
+    allow_origins=["*"],  # Change this to your frontend origin in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -31,25 +32,32 @@ app.add_middleware(
 def detect_phishing_logic(url: str):
     static_html = crawl_static_html(url)
     rendered_html = crawl_dynamic_html(url)
+    
+    # Extract DOM elements
+    dom_info = parse_html_for_dom_elements(rendered_html)
+
+    # Image extraction and OCR
     image_paths = extract_and_download_images(rendered_html, url)
     ocr_text = perform_ocr_on_images(image_paths)
-    # print("OCR text", ocr_text)
-    llm_input = prepare_llm_input(rendered_html, ocr_text)
-    # print("LLM INPUT", llm_input)
+
+    # Prepare input for LLM
+    llm_input = prepare_llm_input(rendered_html, ocr_text, dom_info)
+
+    # Run LLM analysis
     result = analyze_with_llm(llm_input)
 
-    # Save result locally (optional)
+    # Optionally save locally
     with open("outputs/results.json", "w") as f:
         json.dump(result, f, indent=2)
 
     return result
 
-# ✅ Endpoint: Run phishing detection (with DB caching)
+# ✅ Endpoint: Run phishing detection
 @app.post("/detect_phishing/")
 async def detect_phishing(request: URLRequest):
     url = request.url
 
-    # Check if URL already exists
+    # Check if result exists in DB
     existing = await collection.find_one({"url": url})
     if existing:
         return {
@@ -57,7 +65,7 @@ async def detect_phishing(request: URLRequest):
             "metadata": {"url": url, "source": "cached"}
         }
 
-    # If not found, process it
+    # Run detection pipeline
     result = detect_phishing_logic(url)
 
     # Save to MongoDB
@@ -76,7 +84,7 @@ async def detect_phishing(request: URLRequest):
         "metadata": {"url": url, "source": "fresh"}
     }
 
-# Optional: Save a given result manually
+# Optional: Manually save a result
 @app.post("/save/")
 async def save_result(result: ResultModel):
     try:
