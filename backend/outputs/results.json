@@ -1,5 +1,5 @@
 {
-  "phishing_score": 9,
+  "phishing_score": 7,
   "verdict": "Phishing",
-  "explanation": "Content associated with illegal streaming/download sites frequently uses aggressive, intrusive, and potentially malicious advertising (malvertising) leading to scams, malware, or phishing pages. The presence of numerous third-party ad/tracking scripts, particularly those associated with intrusive overlays and suspicious redirects (`shotgunchancecruel.com`, `calmbytedishwater.com`, `cleverwebserver.com`), and push notification prompts strongly indicates a high risk of deceptive practices and exposure to phishing attempts or malware."
+  "explanation": "The site offers free access to copyrighted movies and TV shows, which is often associated with illegal activities and high risk of malware, intrusive ads, and credential phishing through fake login forms."
 }

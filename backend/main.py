@@ -33,7 +33,9 @@ def detect_phishing_logic(url: str):
     rendered_html = crawl_dynamic_html(url)
     image_paths = extract_and_download_images(rendered_html, url)
     ocr_text = perform_ocr_on_images(image_paths)
+    # print("OCR text", ocr_text)
     llm_input = prepare_llm_input(rendered_html, ocr_text)
+    # print("LLM INPUT", llm_input)
     result = analyze_with_llm(llm_input)
 
     # Save result locally (optional)

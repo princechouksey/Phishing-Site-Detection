@@ -62,3 +62,6 @@ chatphishdetector/
    git clone https://github.com/yourusername/chatphishdetector.git
    cd chatphishdetector
 
+
+
+<!-- uvicorn main:app --reload -->
